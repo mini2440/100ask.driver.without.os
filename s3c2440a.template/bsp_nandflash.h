@@ -8,8 +8,6 @@
 #define TWRPH1  0
 
 int isBootFromNorFlash(void);
-void copy_code_to_sdram(unsigned char *src, unsigned char *dest, unsigned int len);
-void clear_bss(void);
 void nand_init(void);
 void nand_select(void);
 void nand_deselect(void);

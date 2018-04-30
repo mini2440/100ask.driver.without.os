@@ -7,7 +7,7 @@ OBJDUMP  = arm-linux-objdump
 CFLAGS   := -Wall -O2
 CPPFLAGS := -nostdinc -nostdlib -fno-builtin
 
-objs     := start.o bsp_uart.o bsp_nandflash.o main.o
+objs     := s3c2440a_setup.o s3c2440a_init.o bsp_uart.o bsp_nandflash.o s3c2440a_main.o
 
 s3c2440a.bin: $(objs)
 	${LD} -Ts3c2440a.lds -o s3c2440a.elf $^

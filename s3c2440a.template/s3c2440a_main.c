@@ -5,8 +5,6 @@
 int main(void)
 {
         uart0_init();
-
         puts("main.c\n\r");
-
         return 0;
 }
