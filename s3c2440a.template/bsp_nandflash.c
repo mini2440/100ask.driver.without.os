@@ -20,10 +20,8 @@ int isBootFromNorFlash(void)
         }
 }
 
-
 void nand_init(void)
 {
-
         /* 设置时序 */
         NFCONF = (TACLS<<12)|(TWRPH0<<8)|(TWRPH1<<4);
         /* 使能NAND Flash控制器, 初始化ECC, 禁止片选 */
@@ -44,6 +42,7 @@ void nand_cmd(unsigned char cmd)
 {
         volatile int i;
         NFCMMD = cmd;
+        // 简单延时
         for (i = 0; i < 10; i++);
 }
 
@@ -80,7 +79,7 @@ void nand_read(unsigned int addr, unsigned char *buf, unsigned int len)
 {
         int col = addr % 2048;
         int i = 0;
-                
+
         /* 1. 选中 */
         nand_select();
 
@@ -105,7 +104,7 @@ void nand_read(unsigned int addr, unsigned char *buf, unsigned int len)
                         i++;
                         addr++;
                 }
-                
+
                 col = 0;
         }
 
