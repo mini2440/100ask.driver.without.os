@@ -10,6 +10,15 @@
 #define REG16(addr)     (*((volatile unsigned int  *)addr))
 #define REG32(addr)     (*((volatile unsigned long *)addr))
 
+/* Clock */
+#define	LOCKTIME        REG32(0x4c000000)
+#define	MPLLCON         REG32(0x4c000004)
+#define	UPLLCON         REG32(0x4c000008)
+#define	CLKCON          REG32(0x4c00000c)
+#define	CLKSLOW         REG32(0x4c000010)
+#define	CLKDIVN         REG32(0x4c000014)
+#define	CAMDIVN         REG32(0x4c000018)
+
 /* GPIO */
 #define GPHCON          REG32(0x56000070)
 #define GPHUP           REG32(0x56000078)

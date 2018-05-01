@@ -1,29 +1,34 @@
 
-#define S3C2440_MPLL_400MHZ     ((0x5c<<12)|(0x01<<4)|(0x01))
+#define S3C2440_MPLL_400MHZ     ()
 
 .text
 .global _start
 _start:
-
-        ldr     r0,     =0x53000000     @ 关闭看门狗
+        /* 关闭看门狗 */
+        ldr     r0,     =0x53000000
         mov     r1,     #0x0
         str     r1,     [r0]
 
-        ldr r0, =0x4c000014
-        // mov r1, #0x03;               // FCLK:HCLK:PCLK=1:2:4, HDIVN=1,PDIVN=1
-        mov r1, #0x05;                  // FCLK:HCLK:PCLK=1:4:8
-        str r1, [r0]
+        /* 设置分频系数 FCLK:HCLK:PCLK = 8:2:1 */
+        ldr     r0,     =0x4c000014
+        mov     r1,     #0x05;
+        str     r1,     [r0]
 
-        /* 如果HDIVN非0，CPU的总线模式应该从“fast bus mode”变为“asynchronous bus mode” */
+        /**
+         * 根据 S3C2440A 数据手册要求:
+         * 如果 HDIVN 非 0, 即 FLCK != HCLK,
+         * CPU的总线模式应该从 "fast bus mode" 变为 "asynchronous bus mode"
+         */
         mrc     p15,    0,  r1, c1, c0, 0       /* 读出控制寄存器 */ 
-        orr     r1,     r1, #0xc0000000         /* 设置为“asynchronous bus mode” */
+        orr     r1,     r1, #0xc0000000         /* 设置为 "asynchronous bus mode" */
         mcr     p15,    0,  r1, c1, c0, 0       /* 写入控制寄存器 */
 
-        /* MPLLCON = S3C2440_MPLL_200MHZ */
-        ldr r0, =0x4c000004
-        ldr r1, =S3C2440_MPLL_400MHZ
-        str r1, [r0]
+        /* (2*(0x5c+8)*12MHz)/(0x01+2)*(2^0x01) = 400Mhz */
+        ldr     r0,     =0x4c000004
+        ldr     r1,     =(0x5c<<12) | (0x01<<4) | (0x01)
+        str     r1,     [r0]
 
+        /* 启动 ICACHE */
         mrc     p15,    0,  r0, c1, c0, 0       @ read control reg
         orr     r0,     r0, #(1<<12)
         mcr     p15,    0,  r0, c1, c0, 0       @ write it back
