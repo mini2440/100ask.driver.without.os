@@ -1,4 +1,4 @@
-CFLAGS 	:= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -ffreestanding
+CFLAGS := -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -ffreestanding
 
 s3c2440a.bin : startup.s bsp_led.c bsp_delay.c main.c
 	arm-linux-gcc $(CFLAGS) -c -o startup.o startup.s

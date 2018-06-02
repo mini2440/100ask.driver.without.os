@@ -8,24 +8,6 @@ _start:
         ldr     r0,     =0x48000000     @ BWSCON
         ldr     r1,     =0x22011110
         str     r1,     [r0]
-        ldr     r0,     =0x48000004     @ BANKCON0
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
-        ldr     r0,     =0x48000008     @ BANKCON1
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
-        ldr     r0,     =0x4800000c     @ BANKCON2
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
-        ldr     r0,     =0x48000010     @ BANKCON3
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
-        ldr     r0,     =0x48000014     @ BANKCON4
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
-        ldr     r0,     =0x48000018     @ BANKCON5
-        ldr     r1,     =0x00000700
-        str     r1,     [r0]
         ldr     r0,     =0x4800001c     @ BANKCON6
         ldr     r1,     =0x00018005
         str     r1,     [r0]
@@ -58,4 +40,3 @@ copy:
         bl      main                    @ 拷贝结束后跳到 SDRAM 中继续执行
 loop:
         b       loop
-
