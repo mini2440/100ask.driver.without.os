@@ -1,0 +1,16 @@
+# oflash 下载工具配置文件
+
+# 说明：
+# 1. "#" 开头行表示注释
+# 2. 每个配置占一行，每行有6个参数，分别表示：JTAG类型、CPU类型、Flash类型、读写类型、偏移地址、文件
+# 3. 可以在配置文件里写多个配置，即多行。用来把不同的文件写到不同的 Flash，不同的偏移地址去
+
+# 参数：
+# 1. JTAG   0:openjtag  1:dongle    2:wiggler
+# 2. CPU    0:s3c2410   1:s3c2440   2:s3c6410
+# 3. Flash  0:nand      1:nor
+# 4. R/W    0:write     1:read
+# 5. offset
+# 5. file
+
+0 1 0 0 0 s3c2440a.bin
