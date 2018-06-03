@@ -27,7 +27,7 @@
 void uart0_init(void);
 void putc(unsigned char c);
 void puts(char *str);
-void puti(int dec);
+void puti(int dec, int nest);
 void putx(unsigned int val);
 void printf(const char *format,...);
 

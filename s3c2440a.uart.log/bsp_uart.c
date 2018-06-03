@@ -44,28 +44,28 @@ void printf(const char *format, ...)
                                 case 'c':
                                 {
                                         /* 记录当前实践参数所在地址 */
-                                        char valch = va_arg(ap,int);
+                                        char valch = va_arg(ap, int);
                                         putc(valch);
                                         format++;
                                         break;
                                 }
                                 case 'd':
                                 {
-                                        int valint = va_arg(ap,int);
-                                        puti(valint);
+                                        int valint = va_arg(ap, int);
+                                        puti(valint, 0);
                                         format++;
                                         break;
                                 }
                                 case 's':
                                 {
-                                        char *valstr = va_arg(ap,char *);
+                                        char *valstr = va_arg(ap, char *);
                                         puts(valstr);
                                         format++;
                                         break;
                                 }
                                 case 'x':
                                 {
-                                        char *valhex = va_arg(ap,char *);
+                                        unsigned int valhex = va_arg(ap, unsigned int);
                                         putx(valhex);
                                         format++;
                                         break;
@@ -108,14 +108,25 @@ void puts(char *str)
 
 /**
  * @brief 发送一个整型数
+ * @param dec 将要打印的整形数字
+ * @param nest 循环嵌套计数变量
  */
-void puti(int dec)
+void puti(int dec, int nest)
 {
         if(dec == 0)
         {
-                return;
+                if(nest)
+                {
+                        return;
+                }
+                else
+                {
+                        putc('0');
+                        return;
+                }
         }
-        puti(dec / 10);
+        nest++;
+        puti(dec / 10, nest);
         putc((char)(dec % 10 + '0'));
 }
 
