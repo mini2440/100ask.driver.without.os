@@ -1,13 +1,27 @@
-CFLAGS := -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -ffreestanding
+CC       = arm-linux-gcc
+LD       = arm-linux-ld
+AR       = arm-linux-ar
+OBJCOPY  = arm-linux-objcopy
+OBJDUMP  = arm-linux-objdump
 
-s3c2440a.bin : startup.s bsp_led.c bsp_delay.c main.c
-	arm-linux-gcc $(CFLAGS) -c -o startup.o startup.s
-	arm-linux-gcc $(CFLAGS) -c -o bsp_led.o bsp_led.c
-	arm-linux-gcc $(CFLAGS) -c -o bsp_delay.o bsp_delay.c
-	arm-linux-gcc $(CFLAGS) -c -o main.o main.c
-	arm-linux-ld --Ttext 0x30000000 startup.o bsp_led.o bsp_delay.o main.o -o s3c2440a.elf
-	arm-linux-objcopy -O binary -S s3c2440a.elf s3c2440a.bin
-	arm-linux-objdump -D -m arm s3c2440a.elf > s3c2440a.dis
-	rm -rf *.o
+CFLAGS   := -Wall -O2
+CPPFLAGS := -nostdinc -nostdlib -fno-builtin
+
+objs := startup.o bsp_led.o bsp_delay.o main.o
+
+s3c2440a.bin: $(objs)
+	${LD} -Ttext 0x30000000 -o s3c2440a.elf $^
+	${OBJCOPY} -O binary -S s3c2440a.elf $@
+	${OBJDUMP} -D -m arm s3c2440a.elf > s3c2440a.dis
+
+%.o: %.c
+	${CC} $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+%.o: %.S
+	${CC} $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+%.o: %.s
+	${CC} $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
 clean:
-	rm -f s3c2440a.dis s3c2440a.bin s3c2440a.elf *.o
+	rm -f *.o *.bin *.elf *.dis

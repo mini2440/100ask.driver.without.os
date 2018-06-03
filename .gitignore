@@ -1,3 +1,4 @@
-s3c2440a.bin
-s3c2440a.dis
-s3c2440a.elf
+*.o
+*.elf
+*.bin
+*.dis
