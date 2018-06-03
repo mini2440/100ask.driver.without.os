@@ -1,13 +1,16 @@
 #include "bsp_uart.h"
 
-/*
- * 初始化UART0
- * 115200,8N1,无流控
+//#include<stdlib.h>
+#include<stdarg.h>
+
+/**
+ * @brief 初始化 UART0
+ * @note 115200, 8N1, 无流控
  */
 void uart0_init(void)
 {
-        GPHCON |= 0xa0;         // GPH2,GPH3用作TXD0,RXD0
-        GPHUP   = 0x0c;         // GPH2,GPH3内部上拉
+        GPHCON |= 0xa0;         // GPH2, GPH3用作TXD0,RXD0
+        GPHUP   = 0x0c;         // GPH2, GPH3内部上拉
 
         ULCON0  = 0x03;         // 8N1(8个数据位，无较验，1个停止位)
         UCON0   = 0x05;         // 查询方式，UART时钟源为PCLK
@@ -16,8 +19,70 @@ void uart0_init(void)
         UBRDIV0 = UART_BRD;     // 波特率为115200
 }
 
-/*
- * 发送一个字符
+/**
+ * @brief 串口 log 函数
+ * @note 目前仅支持 %c %d %s %x 选项
+ */
+void printf(const char *format, ...)
+{
+        va_list ap;
+
+        /* 将ap指向第一个实际参数的地址 */
+        va_start(ap,format);
+        while(*format)
+        {
+                if(*format != '%')
+                {
+                        putc(*format);
+                        format++;
+                }
+                else
+                {
+                        format++;
+                        switch(*format)
+                        {
+                                case 'c':
+                                {
+                                        /* 记录当前实践参数所在地址 */
+                                        char valch = va_arg(ap,int);
+                                        putc(valch);
+                                        format++;
+                                        break;
+                                }
+                                case 'd':
+                                {
+                                        int valint = va_arg(ap,int);
+                                        puti(valint);
+                                        format++;
+                                        break;
+                                }
+                                case 's':
+                                {
+                                        char *valstr = va_arg(ap,char *);
+                                        puts(valstr);
+                                        format++;
+                                        break;
+                                }
+                                case 'x':
+                                {
+                                        char *valhex = va_arg(ap,char *);
+                                        putx(valhex);
+                                        format++;
+                                        break;
+                                }
+                                default:
+                                {
+                                        putc(*format);
+                                        format++;
+                                }
+                        }
+                }
+        }
+        va_end(ap);
+}
+
+/**
+ * @brief 发送一个字符
  */
 void putc(unsigned char c)
 {
@@ -28,6 +93,9 @@ void putc(unsigned char c)
         UTXH0 = c;
 }
 
+/**
+ * @brief 发送一个字符串
+ */
 void puts(char *str)
 {
         int i = 0;
@@ -38,13 +106,27 @@ void puts(char *str)
         }
 }
 
-void puthex(unsigned int val)
+/**
+ * @brief 发送一个整型数
+ */
+void puti(int dec)
 {
-        /* 0x1234abcd */
+        if(dec == 0)
+        {
+                return;
+        }
+        puti(dec / 10);
+        putc((char)(dec % 10 + '0'));
+}
+
+/**
+ * @brief 发送一个 16 进制数
+ * @note 打印长度固定为 8 位
+ */
+void putx(unsigned int val)
+{
         int i;
         int j;
-
-        puts("0x");
 
         for (i = 0; i < 8; i++)
         {

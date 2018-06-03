@@ -27,6 +27,8 @@
 void uart0_init(void);
 void putc(unsigned char c);
 void puts(char *str);
-void puthex(unsigned int val);
+void puti(int dec);
+void putx(unsigned int val);
+void printf(const char *format,...);
 
 #endif /* _BSP_UART_H_ */

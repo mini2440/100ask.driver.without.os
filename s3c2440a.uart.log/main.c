@@ -1,13 +1,18 @@
 #include "main.h"
 #include "bsp_uart.h"
 
-int main()
+int main(void)
 {
-        volatile int i, j;
         uart0_init();
 
-        int a = 9;
-        puthex(a);
+        char ch = 'A';
+        char *str = "hello world";
+        int dec = 1234;
+        int hex = 0xabcd;
+        printf("ch = %c, str = %s, dec = %d, hex = %x\r\n", ch, str, dec, hex);
+
+        int zero = 0;
+        printf("zero = %d\r\n", zero);
 
         return 0;
 }
