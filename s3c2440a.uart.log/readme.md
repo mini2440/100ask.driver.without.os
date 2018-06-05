@@ -44,30 +44,7 @@
 使用串口线连接 PC 和开发板，PC 运行串口终端，接收开发板打印信息
 
     ch = A, str = hello world, dec = 1234, hex = 0000ABCD
-    zero =
-
-对照源码发现 0 是打印不出来的，这个后续在看看怎么优化它
-
-```
-#include "main.h"
-#include "bsp_uart.h"
-
-int main(void)
-{
-        uart0_init();
-
-        char ch = 'A';
-        char *str = "hello world";
-        int dec = 1234;
-        int hex = 0xabcd;
-        printf("ch = %c, str = %s, dec = %d, hex = %x\r\n", ch, str, dec, hex);
-
-        int zero = 0;
-        printf("zero = %d\r\n", zero);
-
-        return 0;
-}
-```
+    zero = 0
 
 这里顺便推荐下 Xshell 工具，还是很好用的：
 

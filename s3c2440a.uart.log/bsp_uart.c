@@ -43,7 +43,7 @@ void printf(const char *format, ...)
                         {
                                 case 'c':
                                 {
-                                        /* 记录当前实践参数所在地址 */
+                                        /* 记录当前实际参数所在地址 */
                                         char valch = va_arg(ap, int);
                                         putc(valch);
                                         format++;
@@ -109,7 +109,7 @@ void puts(char *str)
 /**
  * @brief 发送一个整型数
  * @param dec 将要打印的整形数字
- * @param nest 循环嵌套计数变量
+ * @param nest 递归调用嵌套计数变量
  */
 void puti(int dec, int nest)
 {
@@ -117,10 +117,12 @@ void puti(int dec, int nest)
         {
                 if(nest)
                 {
+                        // 后面发现递归以 0 作为结束标识
                         return;
                 }
                 else
                 {
+                        // 第一次递归就发现 dec = 0
                         putc('0');
                         return;
                 }
